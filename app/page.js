@@ -1,95 +1,79 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { Button } from "@nextui-org/button";
+import { useRouter } from "next/navigation";
+import {
+  spotifyBaseUrl,
+  spotifyClientId,
+  spotifyRedirectUri,
+  spotifyScope,
+  youtubeBaseUrl,
+  youtubeClientId,
+  youtubeRedirectUri,
+  youtubeScope,
+} from "./constants";
 
-export default function Home() {
+export default function Page() {
+  const router = useRouter();
+
+  const isSpotifyDisabled =
+    localStorage.getItem("spotifyToken") && localStorage.getItem("spotifyId")
+      ? true
+      : false;
+
+  const isYoutubeDisabled =
+    localStorage.getItem("youtubeTracks") &&
+    localStorage.getItem("youtubeToken")
+      ? true
+      : false;
+
+  const handleSpotify = () => {
+    const url = `${spotifyBaseUrl}?response_type=token&client_id=${spotifyClientId}&redirect_uri=${encodeURIComponent(
+      spotifyRedirectUri
+    )}&scope=${encodeURIComponent(spotifyScope)}`;
+    router.push(url);
+  };
+
+  const handleYoutube = () => {
+    const url = `${youtubeBaseUrl}?response_type=token&client_id=${youtubeClientId}&redirect_uri=${encodeURIComponent(
+      youtubeRedirectUri
+    )}&scope=${encodeURIComponent(youtubeScope)}`;
+    router.push(url);
+  };
+
+  const handleConvert = () => {
+    router.push("/convertToSpotify");
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div>
+      <div className="flex flex-col w-screen h-screen items-center justify-center gap-3">
+        <div className="flex gap-3 flex-row">
+          <Button
+            color="primary"
+            variant={isSpotifyDisabled ? "bordered" : "solid"}
+            onClick={handleSpotify}
+            isDisabled={isSpotifyDisabled}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            Spotify
+          </Button>
+          <Button
+            color="primary"
+            variant={isYoutubeDisabled ? "bordered" : "solid"}
+            onClick={handleYoutube}
+            isDisabled={isYoutubeDisabled}
+          >
+            Youtube Music
+          </Button>
         </div>
+        <Button
+          onClick={handleConvert}
+          isDisabled={!isYoutubeDisabled || !isSpotifyDisabled}
+          variant="bordered"
+          color="secondary"
+        >
+          Convert to Spotify
+        </Button>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    </div>
+  );
 }
