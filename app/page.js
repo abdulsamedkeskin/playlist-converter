@@ -11,20 +11,27 @@ import {
   youtubeRedirectUri,
   youtubeScope,
 } from "./constants";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
+  const [isSpotifyDisabled, setIsSpotifyDisabled] = useState(false);
+  const [isYoutubeDisabled, setIsYoutubeDisabled] = useState(false);
 
-  const isSpotifyDisabled =
-    localStorage?.getItem("spotifyToken") && localStorage?.getItem("spotifyId")
-      ? true
-      : false;
-
-  const isYoutubeDisabled =
-    localStorage?.getItem("youtubeTracks") &&
-    localStorage?.getItem("youtubeToken")
-      ? true
-      : false;
+  useEffect(() => {
+    setIsSpotifyDisabled(
+      localStorage?.getItem("spotifyToken") &&
+        localStorage?.getItem("spotifyId")
+        ? true
+        : false
+    );
+    setIsYoutubeDisabled(
+      localStorage?.getItem("youtubeTracks") &&
+        localStorage?.getItem("youtubeToken")
+        ? true
+        : false
+    );
+  }, []);
 
   const handleSpotify = () => {
     const url = `${spotifyBaseUrl}?response_type=token&client_id=${spotifyClientId}&redirect_uri=${encodeURIComponent(
