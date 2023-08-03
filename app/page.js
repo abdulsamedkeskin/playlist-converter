@@ -16,13 +16,13 @@ export default function Page() {
   const router = useRouter();
 
   const isSpotifyDisabled =
-    localStorage.getItem("spotifyToken") && localStorage.getItem("spotifyId")
+    localStorage?.getItem("spotifyToken") && localStorage?.getItem("spotifyId")
       ? true
       : false;
 
   const isYoutubeDisabled =
-    localStorage.getItem("youtubeTracks") &&
-    localStorage.getItem("youtubeToken")
+    localStorage?.getItem("youtubeTracks") &&
+    localStorage?.getItem("youtubeToken")
       ? true
       : false;
 
